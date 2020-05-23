@@ -11,7 +11,7 @@ public class StudentPresence {
     private String id;
 
     @Column(name = "student_id")
-    private String studentId;
+    private Student studentId;
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "dtfi_id")
@@ -24,13 +24,13 @@ public class StudentPresence {
 
     }
 
-    public StudentPresence(String studentId, DayTimeFrameInstance dtfiId, PresenceStatus presenceStatus) {
+    public StudentPresence(Student studentId, DayTimeFrameInstance dtfiId, PresenceStatus presenceStatus) {
         this.studentId = studentId;
         this.dtfiId = dtfiId;
         this.presenceStatus = presenceStatus;
     }
 
-    public StudentPresence(String id, String studentId, DayTimeFrameInstance dtfiId, PresenceStatus presenceStatus) {
+    public StudentPresence(String id, Student studentId, DayTimeFrameInstance dtfiId, PresenceStatus presenceStatus) {
         this.id = id;
         this.studentId = studentId;
         this.dtfiId = dtfiId;
@@ -45,11 +45,11 @@ public class StudentPresence {
         this.id = id;
     }
 
-    public String getStudentId() {
+    public Student getStudentId() {
         return studentId;
     }
 
-    public void setStudentId(String studentId) {
+    public void setStudentId(Student studentId) {
         this.studentId = studentId;
     }
 
