@@ -6,7 +6,7 @@ import server.DTOs.DayTimeFrameInstanceTransport;
 import server.services.CourseScheduleService;
 
 @RestController
-@RequestMapping(value = "/course-schedule")
+@RequestMapping("/course-schedule")
 public class CourseScheduleController {
 
     private CourseScheduleService courseScheduleService;
@@ -26,7 +26,7 @@ public class CourseScheduleController {
     }
 
     @PutMapping("/")
-    public CourseScheduleTransport changeCourseSchedule(@RequestBody CourseScheduleTransport courseSchedule) {
+    public CourseScheduleTransport updateCourseSchedule(@RequestBody CourseScheduleTransport courseSchedule) {
         return courseScheduleService.changeCourseSchedule(courseSchedule);
     }
 

@@ -2,6 +2,7 @@ package server.services;
 
 import org.springframework.stereotype.Service;
 import server.DTOs.*;
+import server.PerRequestIdStorage;
 import server.integration.models.SerializableEmail;
 import server.integration.producers.EmailProducer;
 import server.mappers.StudentPresenceMapper;
@@ -85,6 +86,7 @@ public class PresenceServiceImpl implements PresenceService {
 
     @Override
     public StudentPresenceReportTransport getPresenceReportByStudentId(String studentId) {
+        studentId = studentId == null ? PerRequestIdStorage.getUserId() : studentId;
         Timestamp currentDateAndTime = new Timestamp(System.currentTimeMillis());
         List<StudentPresenceTransport> studentPresenceTransports = studentPresenceRepo.findByStudentId(studentId).stream()
                 .map(StudentPresenceMapper::studentPresenceToStudentPresenceTransport).collect(Collectors.toList());
@@ -95,6 +97,9 @@ public class PresenceServiceImpl implements PresenceService {
     public TeacherPresenceTransport saveTeacherPresence(TeacherPresenceTransport teacherPresenceTransport) {
         DayTimeFrameInstance dayTimeFrameInstance = dayTimeFrameInstanceRepo.findById(teacherPresenceTransport.getDtfiId())
                 .orElseThrow(() -> new NoSuchElementException("DayTimeFrame with ID: " + teacherPresenceTransport.getDtfiId() + " not found!"));
+        if(teacherPresenceTransport.getTeacherId() == null) {
+            teacherPresenceTransport.setTeacherId(PerRequestIdStorage.getUserId());
+        }
         TeacherPresence teacherPresence = TeacherPresenceMapper.teacherPresenceTransportToTeacherPresence(teacherPresenceTransport, dayTimeFrameInstance);
         teacherPresence.setId(UUID.randomUUID().toString());
         return TeacherPresenceMapper.teacherPresenceToTeacherPresenceTransport(teacherPresenceRepo.save(teacherPresence));
@@ -102,6 +107,7 @@ public class PresenceServiceImpl implements PresenceService {
 
     @Override
     public TeacherPresenceReportTransport getPresenceReportByTeacherId(String teacherId) {
+        teacherId = teacherId == null ? PerRequestIdStorage.getUserId() : teacherId;
         Timestamp currentDateAndTime = new Timestamp(System.currentTimeMillis());
         List<TeacherPresenceTransport> teacherPresenceTransports = teacherPresenceRepo.findByTeacherId(teacherId).stream()
                 .map(TeacherPresenceMapper::teacherPresenceToTeacherPresenceTransport).collect(Collectors.toList());

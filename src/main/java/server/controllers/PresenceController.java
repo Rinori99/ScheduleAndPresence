@@ -6,7 +6,7 @@ import server.models.PresenceStatus;
 import server.services.PresenceService;
 
 @RestController
-@RequestMapping(value = "/presence")
+@RequestMapping("/presence")
 public class PresenceController {
 
     private PresenceService presenceService;

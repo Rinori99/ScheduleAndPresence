@@ -6,7 +6,7 @@ import server.DTOs.SchoolScheduleTransport;
 import server.services.SchoolScheduleService;
 
 @RestController
-@RequestMapping(value = "/school-schedule")
+@RequestMapping("/school-schedule")
 public class SchoolScheduleController {
 
     private SchoolScheduleService schoolScheduleService;
@@ -27,7 +27,7 @@ public class SchoolScheduleController {
     }
 
     @PutMapping("/")
-    public void changeSchoolSchedule(@RequestBody SchoolScheduleTransport schoolSchedule) {
+    public void updateSchoolSchedule(@RequestBody SchoolScheduleTransport schoolSchedule) {
         schoolScheduleService.changeSchoolSchedule(schoolSchedule);
     }
 
