@@ -1,5 +1,7 @@
 package server.models;
 
+import org.hibernate.annotations.GenericGenerator;
+
 import javax.persistence.*;
 import java.sql.Date;
 
@@ -8,7 +10,9 @@ import java.sql.Date;
 public class DayTimeFrameInstance {
 
     @Id
-    @Column(name = "id")
+    @GeneratedValue(generator = "uuid2")
+    @GenericGenerator(name = "uuid2", strategy = "org.hibernate.id.UUIDGenerator")
+    @Column(name = "id", columnDefinition = "NVARCHAR(36)")
     private String id;
 
     @ManyToOne(cascade = CascadeType.ALL)

@@ -5,6 +5,8 @@ import org.springframework.web.bind.annotation.*;
 import server.DTOs.SchoolScheduleTransport;
 import server.services.SchoolScheduleService;
 
+import javax.transaction.Transactional;
+
 @RestController
 @RequestMapping("/school-schedule")
 public class SchoolScheduleController {
@@ -16,24 +18,24 @@ public class SchoolScheduleController {
     }
 
     @ResponseStatus(HttpStatus.OK)
-    @GetMapping("/")
+    @GetMapping
     public SchoolScheduleTransport getSchoolScheduleBySchoolId(@RequestParam String schoolId) {
         return schoolScheduleService.getSchoolScheduleBySchoolId(schoolId);
     }
 
-    @PostMapping("/")
+    @PostMapping
     public SchoolScheduleTransport createSchoolSchedule(@RequestBody SchoolScheduleTransport schoolSchedule) {
         return schoolScheduleService.saveSchoolSchedule(schoolSchedule);
     }
 
-    @PutMapping("/")
+    @PutMapping
     public void updateSchoolSchedule(@RequestBody SchoolScheduleTransport schoolSchedule) {
         schoolScheduleService.changeSchoolSchedule(schoolSchedule);
     }
 
     @ResponseStatus(HttpStatus.OK)
-    @DeleteMapping("?schoolId={schoolId}")
-    public void deleteSchoolScheduleBySchoolId(@RequestParam String schoolId) {
+    @DeleteMapping
+    public void deleteSchoolScheduleBySchoolId(@RequestParam("schoolId") String schoolId) {
         schoolScheduleService.deleteSchoolScheduleBySchoolId(schoolId);
     }
 

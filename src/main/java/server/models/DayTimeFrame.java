@@ -2,7 +2,6 @@ package server.models;
 
 import javax.persistence.*;
 import java.sql.Time;
-import java.util.UUID;
 
 @Entity
 @Table(name = "day_time_frame")
@@ -13,7 +12,7 @@ public class DayTimeFrame {
     private String id;
 
     @Column(name = "day")
-    private Day day;
+    private String day;
 
     @Column(name = "start_time")
     private Time startTime;
@@ -22,7 +21,7 @@ public class DayTimeFrame {
     private Time endTime;
 
     @Column(name = "type")
-    private TimeFrameType type;
+    private String type;
 
     @Column(name = "school_id")
     private String schoolId;
@@ -31,7 +30,7 @@ public class DayTimeFrame {
 
     }
 
-    public DayTimeFrame(Day day, Time startTime, Time endTime, TimeFrameType type, String schoolId) {
+    public DayTimeFrame(String day, Time startTime, Time endTime, String type, String schoolId) {
         this.day = day;
         this.startTime = startTime;
         this.endTime = endTime;
@@ -39,7 +38,7 @@ public class DayTimeFrame {
         this.schoolId = schoolId;
     }
 
-    public DayTimeFrame(String id, Day day, Time startTime, Time endTime, TimeFrameType type, String schoolId) {
+    public DayTimeFrame(String id, String day, Time startTime, Time endTime, String type, String schoolId) {
         this.id = id;
         this.day = day;
         this.startTime = startTime;
@@ -54,14 +53,6 @@ public class DayTimeFrame {
 
     public void setId(String id) {
         this.id = id;
-    }
-
-    public Day getDay() {
-        return day;
-    }
-
-    public void setDay(Day day) {
-        this.day = day;
     }
 
     public Time getStartTime() {
@@ -80,14 +71,6 @@ public class DayTimeFrame {
         this.endTime = endTime;
     }
 
-    public TimeFrameType getType() {
-        return type;
-    }
-
-    public void setType(TimeFrameType type) {
-        this.type = type;
-    }
-
     public String getSchoolId() {
         return schoolId;
     }
@@ -96,4 +79,19 @@ public class DayTimeFrame {
         this.schoolId = schoolId;
     }
 
+    public String getDay() {
+        return day;
+    }
+
+    public void setDay(String day) {
+        this.day = day;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
 }

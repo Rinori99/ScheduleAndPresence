@@ -7,6 +7,8 @@ import server.mappers.DayTimeFrameMapper;
 import server.models.DayTimeFrame;
 import server.repositories.DayTimeFrameRepo;
 
+import javax.transaction.Transactional;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -27,6 +29,7 @@ public class SchoolScheduleServiceImpl implements SchoolScheduleService {
         return new SchoolScheduleTransport(schoolId, dayTimeFrameTransports);
     }
 
+    @Transactional
     @Override
     public SchoolScheduleTransport changeSchoolSchedule(SchoolScheduleTransport schoolSchedule) {
         String schoolId = schoolSchedule.getSchoolId();
@@ -45,6 +48,7 @@ public class SchoolScheduleServiceImpl implements SchoolScheduleService {
         return new SchoolScheduleTransport(schoolId, savedDayTimeFrameTransports);
     }
 
+    @Transactional
     @Override
     public void deleteSchoolScheduleBySchoolId(String schoolId) {
         dayTimeFrameRepo.deleteBySchoolId(schoolId);

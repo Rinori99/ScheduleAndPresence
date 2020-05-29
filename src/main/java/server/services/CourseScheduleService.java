@@ -2,6 +2,7 @@ package server.services;
 
 import server.DTOs.CourseScheduleTransport;
 import server.DTOs.DayTimeFrameInstanceTransport;
+import server.DTOs.DtfIDescriptionTransport;
 
 public interface CourseScheduleService {
 
@@ -17,5 +18,5 @@ public interface CourseScheduleService {
 
     void deleteDayTimeFrameInstanceById(String dtfiId);
 
-    DayTimeFrameInstanceTransport setDayTimeFrameInstanceDescription(String dtfiId, String description);
+    DayTimeFrameInstanceTransport setDayTimeFrameInstanceDescription(DtfIDescriptionTransport descriptionTransport);
 }

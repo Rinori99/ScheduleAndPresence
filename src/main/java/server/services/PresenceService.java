@@ -1,13 +1,12 @@
 package server.services;
 
 import server.DTOs.*;
-import server.models.PresenceStatus;
 
 public interface PresenceService {
 
     ClassPresenceTransport saveStudentsPresence(ClassPresenceTransport classPresence);
 
-    StudentPresenceTransport updateStudentPresence(String studentPresenceId, PresenceStatus presenceStatus);
+    StudentPresenceTransport updateStudentPresence(String studentPresenceId, StudentPresenceTransport studentPresenceTransport);
 
     StudentPresenceReportTransport getPresenceReportByStudentId(String studentId);
 

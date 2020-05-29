@@ -23,6 +23,10 @@ public class Parent {
     @ManyToMany(mappedBy = "parents")
     private List<Student> students;
 
+    public Parent() {
+
+    }
+
     public Parent(String id, String firstName, String lastName, String email) {
         this.id = id;
         this.firstName = firstName;

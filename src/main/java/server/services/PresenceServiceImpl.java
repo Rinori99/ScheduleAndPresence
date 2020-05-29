@@ -10,7 +10,6 @@ import server.mappers.TeacherPresenceMapper;
 import server.models.*;
 import server.repositories.DayTimeFrameInstanceRepo;
 import server.repositories.StudentPresenceRepo;
-import server.repositories.StudentRepo;
 import server.repositories.TeacherPresenceRepo;
 
 import java.sql.Timestamp;
@@ -26,15 +25,15 @@ public class PresenceServiceImpl implements PresenceService {
     private StudentPresenceRepo studentPresenceRepo;
     private TeacherPresenceRepo teacherPresenceRepo;
     private DayTimeFrameInstanceRepo dayTimeFrameInstanceRepo;
-    private StudentRepo studentRepo;
+    private StudentService studentService;
     private EmailProducer emailProducer;
 
     public PresenceServiceImpl(StudentPresenceRepo studentPresenceRepo, TeacherPresenceRepo teacherPresenceRepo,
-                               DayTimeFrameInstanceRepo dayTimeFrameInstanceRepo, StudentRepo studentRepo, EmailProducer emailProducer) {
+                               DayTimeFrameInstanceRepo dayTimeFrameInstanceRepo, StudentService studentService, EmailProducer emailProducer) {
         this.studentPresenceRepo = studentPresenceRepo;
         this.teacherPresenceRepo = teacherPresenceRepo;
         this.dayTimeFrameInstanceRepo = dayTimeFrameInstanceRepo;
-        this.studentRepo = studentRepo;
+        this.studentService = studentService;
         this.emailProducer = emailProducer;
     }
 
@@ -46,12 +45,12 @@ public class PresenceServiceImpl implements PresenceService {
         List<StudentPresenceTransport> studentPresenceTransports = classPresence.getStudentPresenceTransports();
         List<StudentPresence> studentPresences = new ArrayList<>();
         for(StudentPresenceTransport spt : studentPresenceTransports) {
-            Student student = studentRepo.findById(spt.getStudentId()).orElseThrow(() ->  new NoSuchElementException("Student not found"));
+            Student student = studentService.getStudentById(spt.getStudentId());
             String id = UUID.randomUUID().toString();
             studentPresences.add(StudentPresenceMapper.studentPresenceTransportToStudentPresence(spt, id, student, dayTimeFrameInstance));
         }
         List<StudentPresence> savedStudentPresence = studentPresenceRepo.saveAll(studentPresences);
-        notifyParentsForAbsentChildren(savedStudentPresence);
+        //notifyParentsForAbsentChildren(savedStudentPresence);
         List<StudentPresenceTransport> savedStudentsPresenceTransport = savedStudentPresence.stream()
                 .map(StudentPresenceMapper::studentPresenceToStudentPresenceTransport).collect(Collectors.toList());
         return new ClassPresenceTransport(dtfiId, savedStudentsPresenceTransport);
@@ -77,10 +76,10 @@ public class PresenceServiceImpl implements PresenceService {
     }
 
     @Override
-    public StudentPresenceTransport updateStudentPresence(String studentPresenceId, PresenceStatus presenceStatus) {
+    public StudentPresenceTransport updateStudentPresence(String studentPresenceId, StudentPresenceTransport studentPresenceTransport) {
         StudentPresence studentPresence = studentPresenceRepo.findById(studentPresenceId)
                 .orElseThrow(() -> new NoSuchElementException("Student Presence not found!"));
-        studentPresence.setPresenceStatus(presenceStatus);
+        studentPresence.setPresenceStatus(studentPresenceTransport.getPresenceStatus());
         return StudentPresenceMapper.studentPresenceToStudentPresenceTransport(studentPresenceRepo.save(studentPresence));
     }
 
@@ -88,7 +87,8 @@ public class PresenceServiceImpl implements PresenceService {
     public StudentPresenceReportTransport getPresenceReportByStudentId(String studentId) {
         studentId = studentId == null ? PerRequestIdStorage.getUserId() : studentId;
         Timestamp currentDateAndTime = new Timestamp(System.currentTimeMillis());
-        List<StudentPresenceTransport> studentPresenceTransports = studentPresenceRepo.findByStudentId(studentId).stream()
+        Student student = studentService.getStudentById(studentId);
+        List<StudentPresenceTransport> studentPresenceTransports = studentPresenceRepo.findByStudentId(student).stream()
                 .map(StudentPresenceMapper::studentPresenceToStudentPresenceTransport).collect(Collectors.toList());
         return new StudentPresenceReportTransport(studentPresenceTransports, currentDateAndTime);
     }

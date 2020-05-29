@@ -3,12 +3,16 @@ package server.services;
 import org.springframework.stereotype.Service;
 import server.DTOs.CourseScheduleTransport;
 import server.DTOs.DayTimeFrameInstanceTransport;
+import server.DTOs.DayTimeFrameTransport;
+import server.DTOs.DtfIDescriptionTransport;
 import server.mappers.DayTimeFrameInstanceMapper;
 import server.models.DayTimeFrame;
 import server.models.DayTimeFrameInstance;
 import server.repositories.DayTimeFrameInstanceRepo;
 import server.repositories.DayTimeFrameRepo;
 
+import javax.transaction.Transactional;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.UUID;
@@ -18,21 +22,29 @@ import java.util.stream.Collectors;
 public class CourseScheduleServiceImpl implements CourseScheduleService {
 
     private DayTimeFrameInstanceRepo dayTimeFrameInstanceRepo;
-    private DayTimeFrameRepo dayTimeFrameRepo;
+    private DayTimeFrameService dayTimeFrameService;
 
-    public CourseScheduleServiceImpl(DayTimeFrameInstanceRepo dayTimeFrameInstanceRepo, DayTimeFrameRepo dayTimeFrameRepo) {
+    public CourseScheduleServiceImpl(DayTimeFrameInstanceRepo dayTimeFrameInstanceRepo, DayTimeFrameService dayTimeFrameService) {
         this.dayTimeFrameInstanceRepo = dayTimeFrameInstanceRepo;
-        this.dayTimeFrameRepo = dayTimeFrameRepo;
+        this.dayTimeFrameService = dayTimeFrameService;
     }
 
     @Override
     public CourseScheduleTransport saveCourseSchedule(CourseScheduleTransport courseSchedule) {
         List<DayTimeFrameInstanceTransport> dayTimeFrameInstanceTransports = courseSchedule.getDayTimeFrameInstances();
         dayTimeFrameInstanceTransports.forEach(dtfi -> dtfi.setId(UUID.randomUUID().toString()));
-        List<DayTimeFrameInstanceTransport> dtfiTransports = dayTimeFrameInstanceRepo.saveAllDayTimeFrameInstances(dayTimeFrameInstanceTransports);
-        return new CourseScheduleTransport(courseSchedule.getCourseId(), dtfiTransports);
+        dayTimeFrameInstanceTransports.forEach(dtfi -> dtfi.setCourseId(courseSchedule.getCourseId()));
+        List<DayTimeFrameInstance> dayTimeFrameInstances = new ArrayList<>();
+        for(DayTimeFrameInstanceTransport dayTimeFrameInstanceTransport : dayTimeFrameInstanceTransports) {
+            DayTimeFrame dayTimeFrame = dayTimeFrameService.findById(dayTimeFrameInstanceTransport.getDtfId());
+            dayTimeFrameInstances.add(DayTimeFrameInstanceMapper.dtfiTransportToDtfi(dayTimeFrameInstanceTransport, dayTimeFrame));
+        }
+        List<DayTimeFrameInstanceTransport> savedDtfiTransports = dayTimeFrameInstanceRepo.saveAll(dayTimeFrameInstances)
+                .stream().map(DayTimeFrameInstanceMapper::dtfiToDtfiTransport).collect(Collectors.toList());
+        return new CourseScheduleTransport(courseSchedule.getCourseId(), savedDtfiTransports);
     }
 
+    @Transactional
     @Override
     public CourseScheduleTransport changeCourseSchedule(CourseScheduleTransport courseSchedule) {
         deleteCourseSchedule(courseSchedule.getCourseId());
@@ -47,6 +59,7 @@ public class CourseScheduleServiceImpl implements CourseScheduleService {
         return new CourseScheduleTransport(courseId, dayTimeFrameInstanceTransports);
     }
 
+    @Transactional
     @Override
     public void deleteCourseSchedule(String courseId) {
         dayTimeFrameInstanceRepo.deleteByCourseId(courseId);
@@ -54,8 +67,7 @@ public class CourseScheduleServiceImpl implements CourseScheduleService {
 
     @Override
     public DayTimeFrameInstanceTransport bookEmptyTimeSlot(String dtfId, DayTimeFrameInstanceTransport dtfiTransport) {
-        DayTimeFrame dayTimeFrame = dayTimeFrameRepo.findById(dtfId).orElseThrow(
-                () -> new NoSuchElementException("DayTimeFrame with ID: " + dtfId + " not found!"));
+        DayTimeFrame dayTimeFrame = dayTimeFrameService.findById(dtfId);
         DayTimeFrameInstance dayTimeFrameInstance = DayTimeFrameInstanceMapper.dtfiTransportToDtfi(dtfiTransport, dayTimeFrame);
         dayTimeFrameInstance.setId(UUID.randomUUID().toString());
         return DayTimeFrameInstanceMapper.dtfiToDtfiTransport(dayTimeFrameInstanceRepo.save(dayTimeFrameInstance));
@@ -67,10 +79,10 @@ public class CourseScheduleServiceImpl implements CourseScheduleService {
     }
 
     @Override
-    public DayTimeFrameInstanceTransport setDayTimeFrameInstanceDescription(String dtfiId, String description) {
-        DayTimeFrameInstance dayTimeFrameInstance = dayTimeFrameInstanceRepo.findById(dtfiId)
-                .orElseThrow(() -> new NoSuchElementException("DayTimeFrameInstance with ID: " + dtfiId + " not found!"));
-        dayTimeFrameInstance.setDescription(description);
+    public DayTimeFrameInstanceTransport setDayTimeFrameInstanceDescription(DtfIDescriptionTransport descriptionTransport) {
+        DayTimeFrameInstance dayTimeFrameInstance = dayTimeFrameInstanceRepo.findById(descriptionTransport.getDtfiId())
+                .orElseThrow(() -> new NoSuchElementException("DayTimeFrameInstance not found!"));
+        dayTimeFrameInstance.setDescription(descriptionTransport.getDescription());
         return DayTimeFrameInstanceMapper.dtfiToDtfiTransport(dayTimeFrameInstanceRepo.save(dayTimeFrameInstance));
     }
 

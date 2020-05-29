@@ -25,6 +25,13 @@ public class Student {
                inverseJoinColumns = { @JoinColumn(name = "parent_id") })
     private List<Parent> parents;
 
+    @OneToMany(mappedBy = "studentId", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<StudentPresence> studentPresences;
+
+    public Student() {
+
+    }
+
     public Student(String id, String firstName, String lastName) {
         this.id = id;
         this.firstName = firstName;

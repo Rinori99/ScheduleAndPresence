@@ -8,7 +8,7 @@ import org.springframework.boot.web.servlet.support.SpringBootServletInitializer
 import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 
 @EnableRabbit
-@EnableEurekaClient
+//@EnableEurekaClient
 @SpringBootApplication
 public class ScheduleAndPresenceApplication extends SpringBootServletInitializer {
 

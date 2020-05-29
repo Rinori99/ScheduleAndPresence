@@ -1,6 +1,7 @@
 package server.repositories;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 import server.DTOs.DayTimeFrameInstanceTransport;
@@ -11,10 +12,10 @@ import java.util.List;
 @Repository
 public interface DayTimeFrameInstanceRepo extends JpaRepository<DayTimeFrameInstance, String> {
 
-    @Query(value = "INSERT INTO day_time_frame_instance values ?1", nativeQuery = true)
-    List<DayTimeFrameInstanceTransport> saveAllDayTimeFrameInstances(List<DayTimeFrameInstanceTransport> dayTimeFrameInstanceTransports);
-
     List<DayTimeFrameInstance> findByCourseId(String courseId);
 
+    @Modifying
+    @Query(value = "DELETE FROM day_time_frame_instance WHERE course_id = ?1", nativeQuery = true)
     void deleteByCourseId(String courseId);
+
 }

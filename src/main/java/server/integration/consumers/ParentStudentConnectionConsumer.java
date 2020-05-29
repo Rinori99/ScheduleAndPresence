@@ -8,15 +8,15 @@ import server.services.ParentService;
 @Service
 public class ParentStudentConnectionConsumer {
 
-    private ParentService parentService;
-
-    public ParentStudentConnectionConsumer(ParentService parentService) {
-        this.parentService = parentService;
-    }
-
-    @RabbitListener(queues = {"${queue.connection.student.parent}"})
-    public void handleStudentParentConnection(SerializableParentStudentConnection connection) {
-        parentService.saveParentStudentConnection(connection.getId(), connection.getStudentId(), connection.getParentId());
-    }
+//    private ParentService parentService;
+//
+//    public ParentStudentConnectionConsumer(ParentService parentService) {
+//        this.parentService = parentService;
+//    }
+//
+//    @RabbitListener(queues = {"${queue.connection.student.parent}"})
+//    public void handleStudentParentConnection(SerializableParentStudentConnection connection) {
+//        parentService.saveParentStudentConnection(connection.getId(), connection.getStudentId(), connection.getParentId());
+//    }
 
 }

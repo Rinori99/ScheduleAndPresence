@@ -1,30 +1,27 @@
 package server.DTOs;
 
-import server.models.Day;
-import server.models.TimeFrameType;
-
 import java.sql.Time;
 
 public class DayTimeFrameTransport {
 
     private String id;
-    private Day day;
+    private String day;
     private Time startTime;
     private Time endTime;
-    private TimeFrameType type;
+    private String type;
 
     public DayTimeFrameTransport() {
 
     }
 
-    public DayTimeFrameTransport(Day day, Time startTime, Time endTime, TimeFrameType type) {
+    public DayTimeFrameTransport(String day, Time startTime, Time endTime, String type) {
         this.day = day;
         this.startTime = startTime;
         this.endTime = endTime;
         this.type = type;
     }
 
-    public DayTimeFrameTransport(String id, Day day, Time startTime, Time endTime, TimeFrameType type) {
+    public DayTimeFrameTransport(String id, String day, Time startTime, Time endTime, String type) {
         this.id = id;
         this.day = day;
         this.startTime = startTime;
@@ -40,11 +37,11 @@ public class DayTimeFrameTransport {
         this.id = id;
     }
 
-    public Day getDay() {
+    public String getDay() {
         return day;
     }
 
-    public void setDay(Day day) {
+    public void setDay(String day) {
         this.day = day;
     }
 
@@ -64,11 +61,11 @@ public class DayTimeFrameTransport {
         this.endTime = endTime;
     }
 
-    public TimeFrameType getType() {
+    public String getType() {
         return type;
     }
 
-    public void setType(TimeFrameType type) {
+    public void setType(String type) {
         this.type = type;
     }
 

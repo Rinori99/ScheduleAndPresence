@@ -2,11 +2,10 @@ package server.controllers;
 
 import org.springframework.web.bind.annotation.*;
 import server.DTOs.*;
-import server.models.PresenceStatus;
 import server.services.PresenceService;
 
 @RestController
-@RequestMapping("/presence")
+@RequestMapping("presence")
 public class PresenceController {
 
     private PresenceService presenceService;
@@ -15,29 +14,29 @@ public class PresenceController {
         this.presenceService = presenceService;
     }
 
-    @GetMapping("?studentId={studentId}")
-    public StudentPresenceReportTransport getPresenceReportForStudent(@RequestParam String studentId) {
+    @GetMapping("student")
+    public StudentPresenceReportTransport getPresenceReportForStudent(@RequestParam(required = false) String studentId) {
         return presenceService.getPresenceReportByStudentId(studentId);
     }
 
-    @GetMapping("?teacherId={teacherId}")
-    public TeacherPresenceReportTransport getPresenceReportForTeacher(@RequestParam String teacherId) {
+    @GetMapping("teacher")
+    public TeacherPresenceReportTransport getPresenceReportForTeacher(@RequestParam(required = false) String teacherId) {
         return presenceService.getPresenceReportByTeacherId(teacherId);
     }
 
-    @PostMapping("/")
+    @PostMapping
     public ClassPresenceTransport setStudentsPresence(@RequestBody ClassPresenceTransport classPresence) {
         return presenceService.saveStudentsPresence(classPresence);
     }
 
-    @PostMapping("/teacher")
+    @PostMapping("teacher")
     public TeacherPresenceTransport saveTeacherPresence(@RequestBody TeacherPresenceTransport teacherPresenceTransport) {
         return presenceService.saveTeacherPresence(teacherPresenceTransport);
     }
 
-    @PutMapping("/{studentPresenceId}")
-    public StudentPresenceTransport changeStudentPresence(@PathVariable String studentPresenceId, @RequestBody String presenceStatus) {
-        return presenceService.updateStudentPresence(studentPresenceId, PresenceStatus.valueOf(presenceStatus));
+    @PutMapping("{studentPresenceId}")
+    public StudentPresenceTransport updateStudentPresence(@PathVariable String studentPresenceId, @RequestBody StudentPresenceTransport studentPresenceTransport) {
+        return presenceService.updateStudentPresence(studentPresenceId, studentPresenceTransport);
     }
 
 }

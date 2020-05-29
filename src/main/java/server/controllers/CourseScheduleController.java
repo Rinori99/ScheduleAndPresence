@@ -3,6 +3,7 @@ package server.controllers;
 import org.springframework.web.bind.annotation.*;
 import server.DTOs.CourseScheduleTransport;
 import server.DTOs.DayTimeFrameInstanceTransport;
+import server.DTOs.DtfIDescriptionTransport;
 import server.services.CourseScheduleService;
 
 @RestController
@@ -15,42 +16,39 @@ public class CourseScheduleController {
         this.courseScheduleService = courseScheduleService;
     }
 
-    @GetMapping("?courseId={courseId}")
-    public CourseScheduleTransport getCourseSchedule(@RequestParam String courseId) {
+    @GetMapping
+    public CourseScheduleTransport getCourseScheduleByCourseId(@RequestParam("courseId") String courseId) {
         return courseScheduleService.getCourseScheduleByCourseId(courseId);
     }
 
-    @PostMapping("/")
+    @PostMapping
     public CourseScheduleTransport saveCourseSchedule(@RequestBody CourseScheduleTransport courseSchedule) {
         return courseScheduleService.saveCourseSchedule(courseSchedule);
     }
 
-    @PutMapping("/")
+    @PutMapping
     public CourseScheduleTransport updateCourseSchedule(@RequestBody CourseScheduleTransport courseSchedule) {
         return courseScheduleService.changeCourseSchedule(courseSchedule);
     }
 
-    @DeleteMapping("?courseId={courseId}")
-    public void deleteCourseSchedule(@RequestParam String courseId) {
+    @DeleteMapping
+    public void deleteCourseSchedule(@RequestParam("courseId") String courseId) {
         courseScheduleService.deleteCourseSchedule(courseId);
     }
 
-    @PostMapping("?dtfId={dtfId}")
-    public DayTimeFrameInstanceTransport bookTimeSlot(@RequestParam String dtfId, @RequestBody DayTimeFrameInstanceTransport dtfiTransport) {
+    @PostMapping("bookings")
+    public DayTimeFrameInstanceTransport bookTimeSlot(@RequestParam("dtfId") String dtfId, @RequestBody DayTimeFrameInstanceTransport dtfiTransport) {
         return courseScheduleService.bookEmptyTimeSlot(dtfId, dtfiTransport);
     }
 
-    @DeleteMapping("/{dtfiId}")
+    @DeleteMapping("{dtfiId}")
     public void emptyTimeSlot(@PathVariable String dtfiId) {
         courseScheduleService.deleteDayTimeFrameInstanceById(dtfiId);
     }
 
-    @PutMapping("/{dtfiId}")
-    public DayTimeFrameInstanceTransport setDescription(@PathVariable String dtfiId, @RequestBody String description) {
-        return courseScheduleService.setDayTimeFrameInstanceDescription(dtfiId, description);
+    @PutMapping("description")
+    public DayTimeFrameInstanceTransport setDescription(@RequestBody DtfIDescriptionTransport descriptionTransport) {
+        return courseScheduleService.setDayTimeFrameInstanceDescription(descriptionTransport);
     }
-
-    // GET schedule for a student
-    // GET schedule for a teacher
 
 }

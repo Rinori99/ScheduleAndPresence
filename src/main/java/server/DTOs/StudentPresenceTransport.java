@@ -1,23 +1,21 @@
 package server.DTOs;
 
-import server.models.PresenceStatus;
-
 public class StudentPresenceTransport {
 
     private String id;
     private String studentId;
     private String dtfiId;
-    private PresenceStatus presenceStatus;
+    private String presenceStatus;
 
     public StudentPresenceTransport() {}
 
-    public StudentPresenceTransport(String studentId, String dtfiId, PresenceStatus presenceStatus) {
+    public StudentPresenceTransport(String studentId, String dtfiId, String presenceStatus) {
         this.studentId = studentId;
         this.dtfiId = dtfiId;
         this.presenceStatus = presenceStatus;
     }
 
-    public StudentPresenceTransport(String id, String studentId, String dtfiId, PresenceStatus presenceStatus) {
+    public StudentPresenceTransport(String id, String studentId, String dtfiId, String presenceStatus) {
         this.id = id;
         this.studentId = studentId;
         this.dtfiId = dtfiId;
@@ -48,11 +46,11 @@ public class StudentPresenceTransport {
         this.dtfiId = dtfiId;
     }
 
-    public PresenceStatus getPresenceStatus() {
+    public String getPresenceStatus() {
         return presenceStatus;
     }
 
-    public void setPresenceStatus(PresenceStatus presenceStatus) {
+    public void setPresenceStatus(String presenceStatus) {
         this.presenceStatus = presenceStatus;
     }
 
