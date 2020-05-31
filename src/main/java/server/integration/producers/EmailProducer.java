@@ -14,14 +14,14 @@ public class EmailProducer {
     @Value("${exchange.direct}")
     private String directExchange;
 
-//    private final RabbitTemplate rabbitTemplate;
-//
-//    public EmailProducer(RabbitTemplate rabbitTemplate) {
-//        this.rabbitTemplate = rabbitTemplate;
-//    }
+    private final RabbitTemplate rabbitTemplate;
+
+    public EmailProducer(RabbitTemplate rabbitTemplate) {
+        this.rabbitTemplate = rabbitTemplate;
+    }
 
     public void produce(SerializableEmail serializableEmail) {
-        //rabbitTemplate.convertAndSend(directExchange, emailDirectRoutingKey, serializableEmail);
+        rabbitTemplate.convertAndSend(directExchange, emailDirectRoutingKey, serializableEmail);
     }
 
 }
