@@ -1,5 +1,8 @@
 package server.DTOs;
 
+import server.annotations.ApiEntity;
+
+@ApiEntity
 public class DtfIDescriptionTransport {
 
     private String dtfiId;

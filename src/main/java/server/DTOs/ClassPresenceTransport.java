@@ -1,7 +1,10 @@
 package server.DTOs;
 
+import server.annotations.ApiEntity;
+
 import java.util.List;
 
+@ApiEntity
 public class ClassPresenceTransport {
 
     private String dtfiId;

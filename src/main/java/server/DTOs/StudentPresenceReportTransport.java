@@ -1,8 +1,11 @@
 package server.DTOs;
 
+import server.annotations.ApiEntity;
+
 import java.sql.Timestamp;
 import java.util.List;
 
+@ApiEntity
 public class StudentPresenceReportTransport {
 
     private List<StudentPresenceTransport> studentPresenceTransports;

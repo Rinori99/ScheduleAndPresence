@@ -1,7 +1,10 @@
 package server.DTOs;
 
+import server.annotations.ApiEntity;
+
 import java.util.List;
 
+@ApiEntity
 public class SchoolScheduleTransport {
 
     private String schoolId;

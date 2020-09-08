@@ -1,7 +1,10 @@
 package server.DTOs;
 
+import server.annotations.ApiEntity;
+
 import java.sql.Time;
 
+@ApiEntity
 public class DayTimeFrameTransport {
 
     private String id;
