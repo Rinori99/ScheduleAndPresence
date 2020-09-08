@@ -12,7 +12,7 @@ public class TeacherPresenceMapper {
     }
 
     public static TeacherPresenceTransport teacherPresenceToTeacherPresenceTransport(TeacherPresence teacherPresence) {
-        return new TeacherPresenceTransport(teacherPresence.getId(), teacherPresence.getTeacherId(), teacherPresence.getDtfiId().toString(),
+        return new TeacherPresenceTransport(teacherPresence.getId(), teacherPresence.getTeacherId(), teacherPresence.getDtfiId().getId(),
                 teacherPresence.isHeld());
     }
 

@@ -13,7 +13,7 @@ public class StudentPresenceMapper {
     }
 
     public static StudentPresenceTransport studentPresenceToStudentPresenceTransport(StudentPresence studentPresence) {
-        return new StudentPresenceTransport(studentPresence.getId(), studentPresence.getStudentId().getId(), studentPresence.getDtfiId().toString(),
+        return new StudentPresenceTransport(studentPresence.getId(), studentPresence.getStudentId().getId(), studentPresence.getDtfiId().getId(),
                                             studentPresence.getPresenceStatus());
     }
 
