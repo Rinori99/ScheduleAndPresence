@@ -1,5 +1,7 @@
 package server.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.util.List;
 
@@ -20,7 +22,8 @@ public class Parent {
     @Column(name = "email")
     private String email;
 
-    @ManyToMany(mappedBy = "parents")
+    @JsonIgnore
+    @ManyToMany(mappedBy = "parents", fetch = FetchType.EAGER)
     private List<Student> students;
 
     public Parent() {
@@ -70,4 +73,7 @@ public class Parent {
         return students;
     }
 
+    public void setStudents(List<Student> students) {
+        this.students = students;
+    }
 }

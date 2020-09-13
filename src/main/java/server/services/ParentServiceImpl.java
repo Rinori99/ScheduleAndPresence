@@ -2,17 +2,22 @@ package server.services;
 
 import org.springframework.stereotype.Service;
 import server.models.Parent;
+import server.models.Student;
 import server.repositories.ParentRepo;
+import server.repositories.StudentRepo;
 
+import java.util.List;
 import java.util.NoSuchElementException;
 
 @Service
 public class ParentServiceImpl implements ParentService {
 
     private ParentRepo parentRepo;
+    private StudentRepo studentRepo;
 
-    public ParentServiceImpl(ParentRepo parentRepo) {
+    public ParentServiceImpl(ParentRepo parentRepo, StudentRepo studentRepo) {
         this.parentRepo = parentRepo;
+        this.studentRepo = studentRepo;
     }
 
     @Override
@@ -27,7 +32,12 @@ public class ParentServiceImpl implements ParentService {
 
     @Override
     public void saveParentStudentConnection(String connectionId, String studentId, String parentId) {
-        parentRepo.saveParentStudent(connectionId, studentId, parentId);
+        Parent parent = parentRepo.findById(parentId).orElseThrow(() -> new RuntimeException("Parent not found!"));
+        Student student = studentRepo.findById(studentId).orElseThrow(() -> new RuntimeException("Student not found!"));
+        List<Student> students = parent.getStudents();
+        students.add(student);
+        parent.setStudents(students);
+        parentRepo.save(parent);
     }
 
 }

@@ -22,7 +22,7 @@ import java.util.Collections;
 import java.util.Set;
 
 @EnableRabbit
-//@EnableEurekaClient
+@EnableEurekaClient
 @SpringBootApplication
 public class ScheduleAndPresenceApplication extends SpringBootServletInitializer {
 
