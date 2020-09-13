@@ -1,5 +1,6 @@
 package server.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.validator.constraints.br.CPF;
 
 import javax.persistence.*;
@@ -19,10 +20,11 @@ public class Student {
     @Column(name = "last_name")
     private String lastName;
 
+    @JsonIgnore
     @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(name = "parent_student",
-               joinColumns = { @JoinColumn(name = "student_id") },
-               inverseJoinColumns = { @JoinColumn(name = "parent_id") })
+            joinColumns = { @JoinColumn(name = "student_id") },
+            inverseJoinColumns = { @JoinColumn(name = "parent_id") })
     private List<Parent> parents;
 
     @OneToMany(mappedBy = "studentId", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
